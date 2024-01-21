@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mood forecaster</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Take care of your mood based on the weather!</h1>
+   <!-- index.html -->
+<!-- ... existing content ... -->
+<form action="/weather" method="post">
+    <label for="city">City:</label>
+    <input type="text" name="city" required>
+    <br>
+    <button type="submit">Get Weather</button>
+</form>
+<!-- ... existing content ... -->
+
+    <div id="result"></div>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('form').submit(function (e) {
+                e.preventDefault();
+                $.post('/weather', $(this).serialize(), function (data) {
+                    if ('error' in data) {
+                        $('#result').html('<p>Error: ' + data.error + '</p>');
+                    } else {
+                        const resultHtml = `
+                            <p>Location: ${data.location}</p>
+                            <p>Weather: ${data.weatherDescription}</p>
+                            <p>Temperature: ${data.temperature}</p>
+                            <p>Mood Suggestion: ${data.moodSuggestion}</p>
+                        `;
+                        $('#result').html(resultHtml);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
